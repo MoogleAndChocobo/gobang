@@ -13,14 +13,14 @@ Chess::Chess()
 void Chess::ShowMap()
 {
 	printf("   ");
-	for (int i = 0; i < kPicMax; ++i)
+	for (int i = 0; i < kMapMax; ++i)
 		printf("%02d ", i + 1);
 	putchar('\n');
 	
-	for (int i = 0; i < kPicMax; ++i)
+	for (int i = 0; i < kMapMax; ++i)
 	{
 		printf("%02d ", i + 1);
-		for (int j = 0; j < kPicMax; ++j)
+		for (int j = 0; j < kMapMax; ++j)
 		{
 			switch(map_[i][j])
 			{
@@ -52,9 +52,9 @@ void Chess::SetValue()
 int Chess::CheckResult()
 {
 	bool flag = false;
-	for (int i = 0; i < kPicMax; ++i)
+	for (int i = 0; i < kMapMax; ++i)
 	{
-		for (int j = 0; j < kPicMax; ++j)
+		for (int j = 0; j < kMapMax; ++j)
 		{
 			for (int k = 0; k < kDirTimes; ++k)
 			{
@@ -77,7 +77,7 @@ bool Chess::checkPer(int x, int y, int val, int order)
 	int mx = kWinCount;
 	while(mx--)
 	{
-		if(!(IsInPic(x, y) && map_[x][y] == val))
+		if(!(IsInMap(x, y) && map_[x][y] == val))
 			return false;
 		x += kDir[order][0];
 		y += kDir[order][1];
@@ -85,9 +85,9 @@ bool Chess::checkPer(int x, int y, int val, int order)
 	return true;
 }
 
-bool Chess::IsInPic(int x, int y)
+bool Chess::IsInMap(int x, int y)
 {
-	return (x >= 0 && x < kPicMax && y >= 0 && y < kPicMax);
+	return (x >= 0 && x < kMapMax && y >= 0 && y < kMapMax);
 }
 
 #endif
