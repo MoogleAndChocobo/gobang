@@ -8,25 +8,25 @@ const int kMapMax = 20;
 
 class Chess
 {
-public:
-	Chess();
-	void ShowMap();
-	void SetValue();
-	int CheckResult();
+ public:
+  Chess();
+  void ShowMap();
+  void SetValue();
+  int CheckResult();
 
-private:
 
-	const int kDir[6][2] = {{-1,0},{1,0},{0,-1},{0,1},{1,1},{-1,-1}};
-	const int kDirTimes = 6;
-	const int kWinCount = 5;
-	const char kNone = ' ';
-	const char kFirst = 'o';
-	const char kSecond = 'x';
+ private:
+  const int kDir[6][2] = {{-1,0},{1,0},{0,-1},{0,1},{1,1},{-1,-1}};
+  const int kDirTimes = 6;
+  const int kWinCount = 5;
+  const char kNone = ' ';
+  const char kFirst = 'o';
+  const char kSecond = 'x';
 
-	int map_[kMapMax][kMapMax];
+  int map_[kMapMax][kMapMax];
 
-	bool checkPer(int x, int y, int val, int order);
-	bool IsInMap(int x, int y);
+  bool checkPer(int x, int y, int val, int order);
+  bool IsInMap(int x, int y);
 };
 
 #endif
