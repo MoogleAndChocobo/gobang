@@ -4,7 +4,7 @@
 #define INPUT_CHESSMAN "请输入落子坐标, 落子颜色: "
 #define ALREADY_HAD "该位置已有棋子, 不能在此位置落子, 请重新选择落子位置: \n"
 
-const int kPicMax = 20;
+const int kMapMax = 20;
 
 class Chess
 {
@@ -23,10 +23,10 @@ private:
 	const char kFirst = 'o';
 	const char kSecond = 'x';
 
-	int map_[kPicMax][kPicMax];
+	int map_[kMapMax][kMapMax];
 
 	bool checkPer(int x, int y, int val, int order);
-	bool IsInPic(int x, int y);
+	bool IsInMap(int x, int y);
 };
 
 #endif
