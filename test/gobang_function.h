@@ -256,3 +256,4 @@ bool Chess::IsInMap(int x, int y)
 }
 
 #endif
+ 
