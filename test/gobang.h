@@ -1,5 +1,5 @@
-#ifndef CLASS_H_
-#define CLASS_H_
+#ifndef GOBANG_H_
+#define GOBANG_H_
 
 #include <cstdio>
 
