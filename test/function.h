@@ -1,9 +1,11 @@
-#ifndef GOBANG_FUNTION_H_
-#define GOBANG_FUNTION_H_
+#ifndef FUNTION_H_
+#define FUNTION_H_
 
 #include <cstdio>
 #include <cstring>
-#include "gobang_class.h"
+#include <vector>
+#include <ctime>
+#include "scores.h"
 
 // 构造函数
 Chess::Chess()
@@ -37,7 +39,7 @@ void Chess::ShowMenu()
 void Chess::Select(bool flag)
 {
 	Init();
-	if(flag)
+	if (flag)
 		ShowMenu();
 
 	printf("MODE--> ");
@@ -120,19 +122,19 @@ void Chess::PersonToPerson()
 // Mode Person to Computer实现
 void Chess::PersonToComputer()
 {
-	ShowMap();
 	int order = 2;
 	while (true)
 	{
 		order = order == 2 ? 1 : 2;
 		if (order == 1)
 		{
+			ShowMap();
 			SetValue(order, false);
 			ShowMap();
 		}
 		else
 		{
-			ComputerSetValue();
+			ComputerSetValue(order);
 		}
 		int ans = CheckResult();
 		if (ans == 1)
@@ -153,12 +155,93 @@ void Chess::PersonToComputer()
 	}
 }
 
+// 对玩家当前棋局进行评估
+bool Chess::HinderPlayer(int color)
+{
+
+	return false;
+}
+
 // Mode Person to Computer下自动生成落子位置
-void Chess::ComputerSetValue()
+void Chess::ComputerSetValue(int color)
 {
 	GenerateNeighbor();
 
+	if (HinderPlayer(color))
+		return;
 
+	memset(score_, 0, sizeof(score_));
+	for (int i = 0; i < kMapMax; ++i)
+	{
+		for (int j = 0; j < kMapMax; ++j)
+		{
+			if (is_neighbor_[i][j])
+			{
+				map_[i][j] = color;
+				score_[i][j] = Calculate(i, j, color);
+				map_[i][j] = 0;
+			}
+		}
+	}
+
+	struct Point
+	{
+		int x, y;
+		Point(int xx = 0, int yy = 0) :x(xx), y(yy){}
+	};
+
+	std::vector<Point> vec;
+	int mx = -10;
+	for (int i = 0; i < kMapMax; ++i)
+	{
+		for (int j = 0; j < kMapMax; ++j)
+		{
+			if (score_[i][j] > mx)
+			{
+				vec.clear();
+				vec.push_back(Point(i, j));
+				mx = score_[i][j];
+			}
+			else if (score_[i][j] == mx)
+			{
+				vec.push_back(Point(i, j));
+			}
+		}
+	}
+
+	int num = vec.size();
+	srand(unsigned(time(NULL)));
+	num = rand() % num;
+	map_[vec[num].x][vec[num].y] = color;
+}
+
+//对当前位置的自身棋局进行评估
+int Chess::Calculate(int x, int y, int color)
+{
+	if (Score100(color))
+		return 100;
+	else if (Score90(color))
+		return 90;
+	else if (Score80(color))
+		return 80;
+	else if (Score70(color))
+		return 70;
+	else if (Score60(color))
+		return 60;
+	else if (Score50(color))
+		return 50;
+	else if (Score40(color))
+		return 40;
+	else if (Score30(color))
+		return 30;
+	else if (Score20(color))
+		return 20;
+	else if (Score10(color))
+		return 10;
+	else if (Score00(color))
+		return 0;
+	else
+		return -10;
 }
 
 // 标记所有邻近棋子
@@ -224,8 +307,8 @@ int Chess::CheckResult()
 		{
 			for (int k = 0; k < kDirTimes; ++k)
 			{
-				if (checkPer(i, j, 1, k)) return 1;
-				if (checkPer(i, j, 2, k)) return 2;
+				if (checkPer(i, j, 1, k, 5)) return 1;
+				if (checkPer(i, j, 2, k, 5)) return 2;
 				if (!map_[i][j]) flag = true;
 			}
 		}
@@ -236,9 +319,9 @@ int Chess::CheckResult()
 }
 
 // 判断单一位置上是否构成比赛结束条件
-bool Chess::checkPer(int x, int y, int val, int order)
+bool Chess::checkPer(int x, int y, int val, int order, const int CheckCount)
 {
-	int mx = kWinCount;
+	int mx = CheckCount;
 	while (mx--)
 	{
 		if (!(IsInMap(x, y) && map_[x][y] == val))
@@ -255,5 +338,9 @@ bool Chess::IsInMap(int x, int y)
 	return (x >= 0 && x < kMapMax && y >= 0 && y < kMapMax);
 }
 
+int Chess::ReverseColor(int color)
+{
+	return color == 2 ? 1 : 2;
+}
+
 #endif
- 
